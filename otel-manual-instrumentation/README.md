@@ -4,6 +4,15 @@ This repository contains the sample application which is used in the Grafana
 webinar [OpenTelemetry manual instrumentation and Grafana](https://grafana.com/go/webinar/how-to-instrument-apps-with-otel-and-grafana/?pg=videos&plcmt=upcoming-webinars).
 It consists of a basic shopping cart Python Flask web application with a backend and a frontend.
 
+## General
+
+1. Setup a local project directory:
+
+    ```sh
+    mkdir otel-manual-instrumentation
+    cd otel-manual-instrumentation
+    ```
+
 ## Backend
 
 ### Requirements
@@ -15,8 +24,8 @@ It consists of a basic shopping cart Python Flask web application with a backend
 1. Set up a local project directory:
 
    ```sh
-   mkdir otel-manual-instrumentation
-   cd otel-manual-instrumentation
+   mkdir backend
+   cd backend
    python3 -m venv venv
    source ./venv/bin/activate
    ```
@@ -41,7 +50,7 @@ It consists of a basic shopping cart Python Flask web application with a backend
 5. From your project directory, run the application:
 
    ```sh
-   opentelemetry-instrument flask run -p 8085
+   opentelemetry-instrument flask run -p 8081
    ```
 
    If you use a different port, you need to update the value of `serverPort` on line [10](./frontend/src/App.js#L10) of [App.js](./frontend/src/App.js).
@@ -54,7 +63,7 @@ It consists of a basic shopping cart Python Flask web application with a backend
 
 ### Instructions
 
-1. Set up a local project:
+1. Set up a local project from root directory `otel-manual-instrumentation`:
 
     ```sh
     npx create-react-app shopping-cart-ui
@@ -69,13 +78,13 @@ It consists of a basic shopping cart Python Flask web application with a backend
     express \
     @types/express
 
-    npm install axios
-
     # Initialize typescript
     npx tsc --init
+
+    npm install axios
     ```
 
-3. Replace the files [`frontend/src/App.js`](./frontend/src/App.js) and [`frontend/src.App.css`](./frontend/src/App.css) in your project from the respective files from this repository.
+3. Replace the files [`shopping-cart-ui/src/App.js`](./shopping-cart-ui/src/App.js) and [`shopping-cart-ui/src.App.css`](./shopping-cart-ui/src/App.css) in your project from the respective files from this repository.
 
 4. From your project directory, run the application:
 

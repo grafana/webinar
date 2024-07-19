@@ -17,16 +17,17 @@ def calculate_total_price():
     return round(total_price, 2)
 
 def set_country():
-    country = request.args.get('player.country', default=None, type=str)
+    country = request.args.get('customer.country', default=None, type=str)
     if country:
         current_span = trace.get_current_span()
-        current_span.set_attribute("player.country", country)
+        current_span.set_attribute("customer.country", country)
 
 @app.route('/get_items', methods=['GET'])
 def get_items():
+    # Parameter use for testing purposes, so we can force a failure.
     should_fail = request.args.get('fail', default=False, type=bool)
+
     if should_fail:
-        print("FAIL")
         return "Error returning", 500
     set_country()
     return jsonify(prices)
