@@ -53,7 +53,7 @@ It consists of a basic shopping cart Python Flask web application with a backend
    opentelemetry-instrument flask run -p 8081
    ```
 
-   If you use a different port, you need to update the value of `serverPort` on line [10](./frontend/src/App.js#L10) of [App.js](./frontend/src/App.js).
+   If you use a different port, you need to update the value of `serverPort` on line [10](./shopping-cart-ui/src/App.js#L10) of [App.js](./shopping-cart-ui/src/App.js).
 
 ## Frontend
 

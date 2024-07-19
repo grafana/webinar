@@ -13,15 +13,39 @@ function App() {
     fetchData();
   }, []);
 
+  const getUserParams = async () => {
+    const ipInfo = await axios.get("http://ipinfo.io")
+    return {
+      "customer.country": `${ipInfo.data.country}`,
+    }
+  }
+
+  const makeGetRequest = async (url) => {
+    return await axios.get(
+      url,
+      {
+        params: await getUserParams()
+      }
+    );
+  }
+
+  const makePostRequest = async (url, data) => {
+    await axios.post(
+      url,
+      data,
+      {
+        params: await getUserParams()
+      }
+    );
+  }
+
   const fetchData = async () => {
     const params = new URLSearchParams(window.location.search);
     // Parameter use for testing purposes, so we can force a failure.
     const forceFail = params.get("fail") ? "?fail=true" : "";
 
     try {
-      const itemsResponse = await axios.get(
-        `http://localhost:${serverPort}/get_items${forceFail}`
-      );
+      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items${forceFail}`)
       setOptionsItems(itemsResponse.data);
     } catch (error) {
       console.error("Error fetching items data:", error);
@@ -33,9 +57,7 @@ function App() {
       })
     }
     try {
-      const response = await axios.get(
-        `http://localhost:${serverPort}/view_cart`
-      );
+      const response = await makeGetRequest(`http://localhost:${serverPort}/view_cart`)
       setCartContent(response.data.cart_content);
       setTotalPrice(response.data.total_price);
     } catch (error) {
@@ -45,7 +67,7 @@ function App() {
 
   const addToCart = async () => {
     try {
-      await axios.post(
+      await makePostRequest(
         `http://localhost:${serverPort}/add_to_cart`,
         {
           item: document.querySelector('#options').value,
