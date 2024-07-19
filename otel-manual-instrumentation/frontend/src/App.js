@@ -7,6 +7,7 @@ function App() {
   const [cartContent, setCartContent] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantityToAdd, setQuantityToAdd] = useState(1);
+  const serverPort = "8081";
 
   useEffect(() => {
     fetchData();
@@ -18,7 +19,7 @@ function App() {
 
     try {
       const itemsResponse = await axios.get(
-        `http://localhost:8085/get_items${forceFail}`
+        `http://localhost:${serverPort}/get_items${forceFail}`
       );
       setOptionsItems(itemsResponse.data);
     } catch (error) {
@@ -32,7 +33,7 @@ function App() {
     }
     try {
       const response = await axios.get(
-        "http://localhost:8085/view_cart"
+        `http://localhost:${serverPort}/view_cart`
       );
       setCartContent(response.data.cart_content);
       setTotalPrice(response.data.total_price);
@@ -44,7 +45,7 @@ function App() {
   const addToCart = async () => {
     try {
       await axios.post(
-        "http://localhost:8085/add_to_cart",
+        `http://localhost:${serverPort}/add_to_cart`,
         {
           item: document.querySelector('#options').value,
           quantity: quantityToAdd,

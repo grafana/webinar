@@ -2,17 +2,15 @@
 
 This repository contains the sample application which is used in the Grafana
 webinar [OpenTelemetry manual instrumentation and Grafana](https://grafana.com/go/webinar/how-to-instrument-apps-with-otel-and-grafana/?pg=videos&plcmt=upcoming-webinars).
-It consists of a basic shopping cart Python Flask web application.
+It consists of a basic shopping cart Python Flask web application with a backend and a frontend.
 
-## Run the sample application locally
+## Backend
 
-### Backend
-
-#### Requirements
+### Requirements
 
 * [Python 3.4+](https://www.python.org/downloads/)
 
-#### Instructions
+### Instructions
 
 1. Set up a local project directory:
 
@@ -46,13 +44,15 @@ It consists of a basic shopping cart Python Flask web application.
    opentelemetry-instrument flask run -p 8085
    ```
 
-### Frontend
+   If you use a different port, you need to update the value of `serverPort` on line [10](./frontend/src/App.js#L10) of [App.js](./frontend/src/App.js).
 
-#### Requirements
+## Frontend
+
+### Requirements
 
 * [`Node.js and npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
-#### Instructions
+### Instructions
 
 1. Set up a local project:
 
