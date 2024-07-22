@@ -25,7 +25,7 @@ def set_country():
 @app.route('/get_items', methods=['GET'])
 def get_items():
     # Parameter use for testing purposes, so we can force a failure.
-    should_fail = request.args.get('fail', default=False, type=bool)
+    should_fail = request.args.get('fail_stock_api', default=False, type=bool)
 
     if should_fail:
         return "Error returning", 500
