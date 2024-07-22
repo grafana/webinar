@@ -6,10 +6,11 @@ from opentelemetry import metrics
 CUSTOMER_COUNTRY = 'customer.country'
 
 app = Flask(__name__)
-fallback_prices = {
-    'apple': 0.5,
-    'banana': 0.3,
-    'orange': 0.25,
+# This is a placeholder for a cache of prices, so we can still show the items if the stock API fails.
+prices_from_cache = {
+    'apple': {"price": 0.5, "age": 3600},
+    'banana': {"price": 0.3, "age": 600},
+    'orange': {"price": 0.2, "age": 1800},
 }
 prices = {
     'apple': 0.3,
@@ -19,8 +20,8 @@ prices = {
 CORS(app)
 cart_content = {}
 
-price_accuracy = metrics.get_meter("app").create_histogram(
-    "price_accuracy", unit="1", description="A histogram of price accuracy"
+price_age = metrics.get_meter("app").create_histogram(
+    "price_age", unit="s", description="A histogram of price age in seconds",
 )
 
 
@@ -47,20 +48,22 @@ def customer_country() -> str:
     return country
 
 
-def report_price_accuracy(accuracy: int):
-    # use values that are clearly distinguishable with the default histogram boundaries:
-    # https://opentelemetry-python.readthedocs.io/en/latest/sdk/metrics.view.html
-    price_accuracy.record(accuracy, {CUSTOMER_COUNTRY: (customer_country())})
+def report_price_age(age: int):
+    # without manual instrumentation, we can see the failure rate of the stock API - but not the price age
+    price_age.record(age, {CUSTOMER_COUNTRY: (customer_country())})
 
 
 def retrieve_prices() -> dict:
     try:
         result = call_stock_api()
-        report_price_accuracy(10)
+        for _, _ in result.items():
+            report_price_age(0)
         return result
     except:
-        report_price_accuracy(5)
-        return fallback_prices
+        # If the stock API fails, we want to return the last known prices so the user can still see the items.
+        for _, price in prices_from_cache.items():
+            report_price_age(price["age"])
+        return {k:v["price"] for (k,v) in prices_from_cache.items()}
 
 
 def set_country():
