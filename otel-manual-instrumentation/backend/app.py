@@ -20,7 +20,7 @@ CORS(app)
 cart_content = {}
 
 price_accuracy = metrics.get_meter("app").create_histogram(
-    "price_accuracy", unit="1", description="A counter of price accuracy"
+    "price_accuracy", unit="1", description="A histogram of price accuracy"
 )
 
 

@@ -42,11 +42,9 @@ function App() {
 
   const fetchData = async () => {
     const params = new URLSearchParams(window.location.search);
-    // Parameter use for testing purposes, so we can force a failure.
-    const forceFail = params.get("fail_stock_api") ? "?fail_stock_api=true" : "";
 
     try {
-      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items${forceFail}`, params)
+      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items`, params)
       setOptionsItems(itemsResponse.data);
     } catch (error) {
       console.error("Error fetching items data:", error);
