@@ -9,8 +9,8 @@ It consists of a basic shopping cart Python Flask web application with a backend
 1. Setup a local project directory:
 
     ```sh
-    mkdir otel-manual-instrumentation
-    cd otel-manual-instrumentation
+    git clone https://github.com/grafana/webinar.git grafana-webinar
+    cd grafana-webinar/otel-manual-instrumentation
     ```
 
 ## Backend
@@ -21,39 +21,22 @@ It consists of a basic shopping cart Python Flask web application with a backend
 
 ### Instructions
 
-1. Set up a local project directory:
+```sh
+cd backend
+./run.sh
+```
 
-   ```sh
-   mkdir backend
-   cd backend
-   python3 -m venv venv
-   source ./venv/bin/activate
-   ```
+or use Docker:
 
-   See [Creating Virtual Environments](https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-virtual-environments) in the official Python documentation for more information.
+```sh
+docker build -t shopping-cart-backend .
+docker run -p 8081:8081 shopping-cart-backend
+```
 
-2. Install Flask and Flask Cors:
+If you use a different port, you need to update 
 
-   ```sh
-   pip install flask flask-cors
-   ```
-
-3. Install Open Telemetry dependencies
-
-    ```sh
-    pip install opentelemetry-instrumentation opentelemetry-distro opentelemetry-exporter-otlp
-    opentelemetry-bootstrap -a install
-    ```
-
-4. Copy the file [`backend/app.py`](./backend/app.py) from this repository into your project directory.
-
-5. From your project directory, run the application:
-
-   ```sh
-   opentelemetry-instrument flask run -p 8081
-   ```
-
-   If you use a different port, you need to update the value of `serverPort` on line [10](./shopping-cart-ui/src/App.js#L10) of [App.js](./shopping-cart-ui/src/App.js).
+- the value of `serverPort` on line [10](./shopping-cart-ui/src/App.js#L10) of [App.js](./shopping-cart-ui/src/App.js).
+- the port number in the [run.sh](./backend/run.sh) script (or in the Dockerfile).
 
 ## Frontend
 
