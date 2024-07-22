@@ -46,30 +46,14 @@ If you use a different port, you need to update
 
 ### Instructions
 
-1. Set up a local project from root directory `otel-manual-instrumentation`:
+1. Install dependencies
 
     ```sh
-    npx create-react-app shopping-cart-ui
     cd shopping-cart-ui
+    npm install
     ```
 
-2. Install dependencies
-
-    ```sh
-    npm install typescript \
-    ts-node \
-    express \
-    @types/express
-
-    # Initialize typescript
-    npx tsc --init
-
-    npm install axios
-    ```
-
-3. Replace the files [`shopping-cart-ui/src/App.js`](./shopping-cart-ui/src/App.js) and [`shopping-cart-ui/src.App.css`](./shopping-cart-ui/src/App.css) in your project from the respective files from this repository.
-
-4. From your project directory, run the application:
+4. Run the application:
 
     ```sh
     npm start
