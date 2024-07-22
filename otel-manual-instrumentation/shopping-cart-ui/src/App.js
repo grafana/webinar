@@ -13,28 +13,29 @@ function App() {
     fetchData();
   }, []);
 
-  const getUserParams = async () => {
-    const ipInfo = await axios.get("http://ipinfo.io")
-    return {
-      "customer.country": `${ipInfo.data.country}`,
+  const getUserParams = async (params) => {
+    if (!params.get("customer.country")) {
+      const ipInfo = await axios.get("http://ipinfo.io")
+      params.set("customer.country", ipInfo.data.country)
     }
+    return params
   }
 
-  const makeGetRequest = async (url) => {
+  const makeGetRequest = async (url, params) => {
     return await axios.get(
       url,
       {
-        params: await getUserParams()
+        params: await getUserParams(params)
       }
     );
   }
 
-  const makePostRequest = async (url, data) => {
+  const makePostRequest = async (url, data, params) => {
     await axios.post(
       url,
       data,
       {
-        params: await getUserParams()
+        params: await getUserParams(params)
       }
     );
   }
@@ -45,19 +46,13 @@ function App() {
     const forceFail = params.get("fail_stock_api") ? "?fail_stock_api=true" : "";
 
     try {
-      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items${forceFail}`)
+      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items${forceFail}`, params)
       setOptionsItems(itemsResponse.data);
     } catch (error) {
       console.error("Error fetching items data:", error);
-      // Have a fallback option
-      setOptionsItems({
-        'apple': 1.0,
-        'banana': 0.3,
-        'orange': 0.25,
-      })
     }
     try {
-      const response = await makeGetRequest(`http://localhost:${serverPort}/view_cart`)
+      const response = await makeGetRequest(`http://localhost:${serverPort}/view_cart`, params)
       setCartContent(response.data.cart_content);
       setTotalPrice(response.data.total_price);
     } catch (error) {
@@ -66,13 +61,15 @@ function App() {
   };
 
   const addToCart = async () => {
+    const params = new URLSearchParams(window.location.search);
     try {
       await makePostRequest(
         `http://localhost:${serverPort}/add_to_cart`,
         {
           item: document.querySelector('#options').value,
           quantity: quantityToAdd,
-        }
+        },
+        params
       );
       fetchData();
     } catch (error) {
