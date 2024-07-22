@@ -3,7 +3,7 @@
 set -euo pipefail
 
 export OTEL_METRIC_EXPORT_INTERVAL="5000"  # so we don't have to wait 60s for metrics
-export OTEL_RESOURCE_ATTRIBUTES="service.name=cart,service.instance.id=localhost:8080"
+export OTEL_RESOURCE_ATTRIBUTES="service.name=cart,service.instance.id=localhost:8081"
 
 python3 -m venv venv
 source ./venv/bin/activate
@@ -20,4 +20,4 @@ opentelemetry-bootstrap -a install
 # Step 2: Run the application
 export OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
 export OTEL_LOGS_EXPORTER=otlp
-opentelemetry-instrument flask run -p 8080
+opentelemetry-instrument flask run -p 8081
