@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from opentelemetry import trace
 from opentelemetry import metrics
+from opentelemetry.trace import SpanKind
 
 CUSTOMER_COUNTRY = 'customer.country'
 
@@ -24,6 +25,8 @@ price_age = metrics.get_meter("app").create_histogram(
     "price_age", unit="s", description="A histogram of price age in seconds",
 )
 
+tracer = trace.get_tracer("app")
+
 
 def calculate_total_price() -> float:
     total_price = sum(prices[item] * quantity for item, quantity in cart_content.items())
@@ -33,12 +36,17 @@ def calculate_total_price() -> float:
 def call_stock_api() -> dict:
     # This is a placeholder for a call to a stock API.
     # This could be a call to an external service, or a call to a local function.
-
-    # Parameter use for testing purposes, so we can force a failure.
-    should_fail = request.args.get('fail_stock_api', default=False, type=bool)
-    if should_fail:
-        raise "Error calling stock API"
-    return prices
+    # We simulate a failure by passing a parameter in the request.
+    # We also create spans to represent the client and server side of the call.
+    # If you call a real service, those spans will be created automatically.
+    with tracer.start_as_current_span("get_price", kind=SpanKind.CLIENT):
+        with tracer.start_as_current_span("get_price", kind=SpanKind.SERVER):
+            # Parameter use for testing purposes, so we can force a failure.
+            should_fail = request.args.get('fail_stock_api', default=False, type=bool)
+            if should_fail:
+                # create a span to represent the stock API call
+                raise "Error calling stock API"
+            return prices
 
 
 def customer_country() -> str:
