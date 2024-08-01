@@ -46,20 +46,15 @@ If you use a different port, you need to update:
 
 ### Instructions
 
-1. Install dependencies
+Use Docker:
 
-    ```sh
-    cd shopping-cart-ui
-    npm install
-    ```
+```sh
+cd shopping-cart-ui
+docker build -t shopping-cart-frontend .
+docker run -p 3001:3001 shopping-cart-frontend
+```
 
-4. Run the application:
-
-    ```sh
-    npm start
-    ```
-
-    With the application running, you should be able to see shopping cart at [http://localhost:3001](http://localhost:3001).
+With the application running, you should be able to see shopping cart at [http://localhost:3001](http://localhost:3001).
 
 ## URL Params
 
