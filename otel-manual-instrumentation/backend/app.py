@@ -41,6 +41,7 @@ def call_stock_api() -> dict:
     # If you call a real service, those spans will be created automatically.
     with tracer.start_as_current_span("get_price", kind=SpanKind.CLIENT):
         with tracer.start_as_current_span("get_price", kind=SpanKind.SERVER):
+            set_country()
             # Parameter use for testing purposes, so we can force a failure.
             should_fail = request.args.get('fail_stock_api', default=False, type=bool)
             if should_fail:
