@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from opentelemetry import trace
 from opentelemetry import metrics
@@ -40,6 +40,7 @@ def call_stock_api() -> dict:
     # We also create spans to represent the client and server side of the call.
     # If you call a real service, those spans will be created automatically.
     with tracer.start_as_current_span("get_price", kind=SpanKind.CLIENT):
+        set_country()
         with tracer.start_as_current_span("get_price", kind=SpanKind.SERVER):
             set_country()
             # Parameter use for testing purposes, so we can force a failure.
@@ -80,13 +81,13 @@ def set_country():
 
 
 @app.route('/get_items', methods=['GET'])
-def get_items():
+def get_items() -> Response:
     set_country()
     return jsonify(retrieve_prices())
 
 
 @app.route('/view_cart', methods=['GET'])
-def view_cart():
+def view_cart() -> Response:
     set_country()
     total_price = calculate_total_price()
     return jsonify({
@@ -96,7 +97,7 @@ def view_cart():
 
 
 @app.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
+def add_to_cart() -> Response:
     set_country()
     data = request.get_json()
     item = data['item']
