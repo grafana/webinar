@@ -3,7 +3,8 @@
 set -euo pipefail
 
 export OTEL_METRIC_EXPORT_INTERVAL="5000"  # so we don't have to wait 60s for metrics
-export OTEL_RESOURCE_ATTRIBUTES="service.name=cart,service.instance.id=localhost:8081"
+export OTEL_SERVICE_NAME=cart
+export OTEL_RESOURCE_ATTRIBUTES=deployment.environment=prod,service.namespace=shop,service.version=1.2,service.instance.id=cart1
 
 python3 -m venv venv
 source ./venv/bin/activate
