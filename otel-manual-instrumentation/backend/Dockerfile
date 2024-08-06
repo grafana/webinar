@@ -20,6 +20,8 @@ ENV OTEL_LOGS_EXPORTER=otlp
 ENV OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
 ENV OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
 ENV OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic%20..."
+ENV OTEL_SERVICE_NAME=cart
+ENV OTEL_RESOURCE_ATTRIBUTES=deployment.environment=prod,service.namespace=shop,service.version=1.2,service.instance.id=cart1
 EXPOSE 8081
 
-CMD [ "opentelemetry-instrument", "--service_name", "cart", "flask", "run", "-h", "0.0.0.0", "-p", "8081" ]
+CMD [ "opentelemetry-instrument", "flask", "run", "-h", "0.0.0.0", "-p", "8081" ]
