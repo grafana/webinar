@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -9,38 +9,16 @@ function App() {
   const [quantityToAdd, setQuantityToAdd] = useState(1);
   const serverPort = "8081";
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const getUserParams = async (params) => {
-    if (!params.get("customer.country")) {
-      const ipInfo = await axios.get("http://ipinfo.io")
-      params.set("customer.country", ipInfo.data.country)
-    }
-    return params
-  }
-
-  const makeGetRequest = async (url, params) => {
+  const makeGetRequest = useCallback(async (url, params) => {
     return await axios.get(
       url,
       {
-        params: await getUserParams(params)
+        params: params
       }
     );
-  }
+  }, []);
 
-  const makePostRequest = async (url, data, params) => {
-    await axios.post(
-      url,
-      data,
-      {
-        params: await getUserParams(params)
-      }
-    );
-  }
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const params = new URLSearchParams(window.location.search);
 
     try {
@@ -56,7 +34,21 @@ function App() {
     } catch (error) {
       console.error("Error fetching cart data:", error);
     }
-  };
+  }, [makeGetRequest]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const makePostRequest = async (url, data, params) => {
+    await axios.post(
+      url,
+      data,
+      {
+        params: params
+      }
+    );
+  }
 
   const addToCart = async () => {
     const params = new URLSearchParams(window.location.search);
