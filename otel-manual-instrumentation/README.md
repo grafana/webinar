@@ -67,3 +67,23 @@ on this request. If no values are passed, it uses your location based on IP addr
 
 Those 2 params can be combined such as `http://localhost:3001/?fail_stock_api=true&customer.country=CA`
 
+## Generate load
+
+For testing purposes, you can generate load by letting this script run for a few hours:
+
+```
+while true; do
+    curl 'http://localhost:8081/get_items?customer.country=BR'
+    curl 'http://localhost:8081/get_items?customer.country=CA'
+    curl 'http://localhost:8081/get_items?customer.country=CA'
+    curl 'http://localhost:8081/get_items?customer.country=CA'
+    curl 'http://localhost:8081/get_items?customer.country=DE'
+    curl 'http://localhost:8081/get_items?fail_stock_api=true&customer.country=DE'
+    curl 'http://localhost:8081/get_items?fail_stock_api=true&customer.country=DE'
+    curl 'http://localhost:8081/get_items?fail_stock_api=true&customer.country=DE'
+    curl 'http://localhost:8081/get_items?fail_stock_api=true&customer.country=DE'
+    curl 'http://localhost:8081/get_items?fail_stock_api=true&customer.country=CA'
+    sleep 300
+done
+```
+
