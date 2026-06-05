@@ -134,7 +134,7 @@ logs, and traces should be visible in Grafana Cloud.
    docker run \
      -e OTEL_RESOURCE_ATTRIBUTES="grafana.host.id=${GRAFANA_HOST_ID}" \
      -e OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf" \
-     -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp" 
+     -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp" \
      -e OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic%20..." \
      -p 8080:8080 \
      grafana-otel-webinar
