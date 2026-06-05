@@ -14,8 +14,8 @@ source ./venv/bin/activate
 # 2. Run `pip freeze > requirements.txt` in the same directory as your app.py file
 pip install -r requirements.txt
 
-# Step 1: Install the OpenTelemetry SDK
-pip install 'opentelemetry-distro[otlp]==0.46b0'
+# Step 1: Install the OpenTelemetry SDK and OTLP exporter
+RUN pip install opentelemetry-distro==0.63b1 opentelemetry-exporter-otlp==1.42.1
 opentelemetry-bootstrap -a install
 
 # Step 2: Run the application
