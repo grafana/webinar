@@ -34,7 +34,7 @@ It consists of a basic shopping cart application with a Python Flask backend and
 
    **Linux / macOS:**
    ```sh
-   export GRAFANA_HOST_ID=hostname
+   export GRAFANA_HOST_ID="${GRAFANA_HOST_ID:-$(hostname)}"
    export OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
    export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic%20..."
    docker compose up --build
@@ -53,11 +53,6 @@ It consists of a basic shopping cart application with a Python Flask backend and
 ## URL parameters
 
 For testing purposes, two query parameters are supported:
-
-- `fail_stock_api` — simulates a failure retrieving item prices, using fallback values (affects the `price_accuracy` metric):
-  `http://localhost:3001/?fail_stock_api=true`
-- `customer.country` — sets the country on the request instead of deriving it from IP:
-  `http://localhost:3001/?customer.country=CA`
 
 - `fail_stock_api`: when adding to your URL such as `http://localhost:3001/?fail_stock_api=true`, this will simulate a failure on retrieving 
 items prices, using fallback values. This is used for the metric `price_accuracy`.
