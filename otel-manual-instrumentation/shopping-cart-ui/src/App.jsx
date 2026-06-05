@@ -77,7 +77,7 @@ function App() {
             <li key={item}>{`${quantity} ${item}(s)`}</li>
           ))}
         </ul>
-        <h2>Total Price: ${totalPrice}</h2>
+        <h2>Total Price: ${Number(totalPrice).toFixed(2)}</h2>
       </div>
       <div className="add-to-cart">
         <h2>Items:</h2>
@@ -85,12 +85,13 @@ function App() {
           <input
             type="number"
             placeholder="Quantity"
+            min="1"
             value={quantityToAdd}
-            onChange={(e) => setQuantityToAdd(parseInt(e.target.value))}
+            onChange={(e) => setQuantityToAdd(Math.max(1, parseInt(e.target.value) || 1))}
           />
           <select name="options" id="options">
             {Object.entries(optionsItems).map(([itemName, itemValue]) => (
-              <option value={itemName} key={itemName}>{`${itemName} ($${itemValue})`}</option>
+              <option value={itemName} key={itemName}>{`${itemName} ($${Number(itemValue).toFixed(2)})`}</option>
             ))}
           </select>
         </div>
