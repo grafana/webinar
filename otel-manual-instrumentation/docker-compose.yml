@@ -20,6 +20,6 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - REACT_APP_BACKEND_URL=http://localhost:8081
+      - VITE_BACKEND_URL=http://localhost:8081
     depends_on:
       - backend
