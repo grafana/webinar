@@ -10,7 +10,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:?}
       - OTEL_EXPORTER_OTLP_HEADERS=${OTEL_EXPORTER_OTLP_HEADERS:?}
       - OTEL_SERVICE_NAME=cart
-      - OTEL_RESOURCE_ATTRIBUTES=grafana.host.id=${GRAFANA_HOST_ID:-${HOSTNAME:?}},deployment.environment=dev,service.namespace=shop,service.version=1.2,service.instance.id=cart1
+      - OTEL_RESOURCE_ATTRIBUTES=grafana.host.id=${GRAFANA_HOST_ID:?}},deployment.environment=dev,service.namespace=shop,service.version=1.2,service.instance.id=cart1
       - OTEL_LOG_LEVEL=debug
 
   shopping-cart-ui:
