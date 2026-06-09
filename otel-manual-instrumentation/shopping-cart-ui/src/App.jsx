@@ -2,12 +2,13 @@ import React, { useCallback, useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:8081";
+
 function App() {
   const [optionsItems, setOptionsItems] = useState({});
   const [cartContent, setCartContent] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantityToAdd, setQuantityToAdd] = useState(1);
-  const serverPort = "8081";
 
   const makeGetRequest = useCallback(async (url, params) => {
     return await axios.get(
@@ -22,13 +23,13 @@ function App() {
     const params = new URLSearchParams(window.location.search);
 
     try {
-      const itemsResponse = await makeGetRequest(`http://localhost:${serverPort}/get_items`, params)
+      const itemsResponse = await makeGetRequest(`${backendUrl}/get_items`, params)
       setOptionsItems(itemsResponse.data);
     } catch (error) {
       console.error("Error fetching items data:", error);
     }
     try {
-      const response = await makeGetRequest(`http://localhost:${serverPort}/view_cart`, params)
+      const response = await makeGetRequest(`${backendUrl}/view_cart`, params)
       setCartContent(response.data.cart_content);
       setTotalPrice(response.data.total_price);
     } catch (error) {
@@ -54,7 +55,7 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     try {
       await makePostRequest(
-        `http://localhost:${serverPort}/add_to_cart`,
+        `${backendUrl}/add_to_cart`,
         {
           item: document.querySelector('#options').value,
           quantity: quantityToAdd,
