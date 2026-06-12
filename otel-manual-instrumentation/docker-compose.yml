@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:?}
+      - OTEL_EXPORTER_OTLP_HEADERS=${OTEL_EXPORTER_OTLP_HEADERS:?}
+      - OTEL_SERVICE_NAME=cart
+      - OTEL_RESOURCE_ATTRIBUTES=grafana.host.id=${GRAFANA_HOST_ID:?},deployment.environment=dev,service.namespace=shop,service.version=1.2,service.instance.id=cart1
+      - OTEL_LOG_LEVEL=debug
+
+  shopping-cart-ui:
+    build:
+      context: ./shopping-cart-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8081
+    depends_on:
+      - backend

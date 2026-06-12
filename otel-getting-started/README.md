@@ -87,9 +87,21 @@ You can find instructions of how to run the sample application application [loca
      export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic%20..." 
      ```
 
+   Grafana Cloud Application Observability uses `grafana.host.id` to count
+   [host-hours](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/pricing/).
+   Each unique, stable value is billed as one host. The value below defaults
+   to your machine's hostname, which is stable across reboots and unique per
+   machine. Override it with `GRAFANA_HOST_ID` if needed.
+
+    ```sh
+    export GRAFANA_HOST_ID="${GRAFANA_HOST_ID:-$(hostname)}"
+    ```
+   
+
 9. Run the instrumented application with telemetry exported to Grafana Cloud:
 
    ```sh
+   export OTEL_RESOURCE_ATTRIBUTES="grafana.host.id=${GRAFANA_HOST_ID}"
    export OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
    export OTEL_LOGS_EXPORTER=otlp
    opentelemetry-instrument \
@@ -115,12 +127,14 @@ logs, and traces should be visible in Grafana Cloud.
    docker build --tag grafana-otel-webinar .
    ```
 
-2. Run the Docker image with OTLP environment variables set:
+2. Run the Docker image with host ID and OTLP environment variables set:
 
    ```sh
+   export GRAFANA_HOST_ID="${GRAFANA_HOST_ID:-$(hostname)}"
    docker run \
+     -e OTEL_RESOURCE_ATTRIBUTES="grafana.host.id=${GRAFANA_HOST_ID}" \
      -e OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf" \
-     -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp" 
+     -e OTEL_EXPORTER_OTLP_ENDPOINT="https://otlp-gateway-prod-us-east-0.grafana.net/otlp" \
      -e OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic%20..." \
      -p 8080:8080 \
      grafana-otel-webinar
